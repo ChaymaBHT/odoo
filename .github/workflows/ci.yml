@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - main
+      - feature-branch  # Replace with your new branch name
+  pull_request:
+    branches: 
+      - main
+      - feature-branch  # Replace with your new branch name
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build and Run Docker Compose
+      run: |
+        docker-compose -f docker-compose.yml build
+        docker-compose -f docker-compose.yml up -d
+
+    - name: Execute Tests
+      run: |
+        # Here, you insert the command to run your tests.
+        # For example, it could be a Docker exec command if your tests require
+        # running inside the Docker environment.
+        docker exec -it your_container_name /path/to/your/test/script
